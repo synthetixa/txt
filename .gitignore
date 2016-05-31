@@ -1,5 +1,4 @@
 *.o
 *.in
-configure
 Makefile
 txt
