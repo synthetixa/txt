@@ -23,8 +23,9 @@ attron(COLOR_PAIR(1));
 
 int row, col;
 getmaxyx(stdscr, row, col);
-mvprintw(row / 2, (col - strlen(PACKAGE_STRING)) / 2, "%s", PACKAGE_STRING);
-  refresh();
+
+mvprintw(0, (col - strlen(PACKAGE_STRING)) / 2, "%s", PACKAGE_STRING);
+
   getch();
   endwin();
 
