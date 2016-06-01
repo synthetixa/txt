@@ -2,32 +2,46 @@
 #include "stdlib.h"
 #include "ncurses.h"
 #include "string.h"
+#include "unistd.h"
 
 #include "../config.h"
 
 
 int main(int argc, char *argv[]) {
 
-  initscr();
-  noecho();
-  keypad(stdscr, TRUE);
-  if(has_colors() == FALSE) {
-    endwin();
-    printf("Colors are not supported by your terminal.\n");
-exit(1);
-  }
+initscr();
+noecho();
+keypad(stdscr, TRUE);
 
-start_color();
-init_pair(1, COLOR_WHITE, COLOR_BLUE);
-attron(COLOR_PAIR(1));
+WINDOW *top_win;
+WINDOW *win;
+WINDOW *bottom_win;
+int wy, wx, y, x, width, height;
+width = 100;
+height = 30;
+y = (LINES - height) / 2;
+x = (COLS - width) / 2;
+getmaxyx(win, wy, wx);
 
-int row, col;
-getmaxyx(stdscr, row, col);
+top_win = newwin(3, width, 1, x);
+box(top_win, 0, 0);
+win = newwin(height, width, y, x);
+box(win, 0, 0);
+bottom_win = newwin(6, width, LINES - 7, x);
+box(bottom_win, 0, 0);
 
-mvprintw(0, (col - strlen(PACKAGE_STRING)) / 2, "%s", PACKAGE_STRING);
+mvwprintw(top_win, 1, (100 - strlen(PACKAGE_STRING)) / 2 , "%s", PACKAGE_STRING);
+curs_set(0);
 
-  getch();
-  endwin();
+refresh();
+wrefresh(win);
+wrefresh(top_win);
+wrefresh(bottom_win);
 
-  return 0;
+sleep(60);
+
+delwin(win);
+endwin();
+
+return 0;
 }
